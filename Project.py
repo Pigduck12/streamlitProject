@@ -13,12 +13,9 @@ st.set_page_config(
 
 st.title("Distribution Fitting App")
 
-# -------------------
-# Layout Columns
-# -------------------
+
 col1, col2,col3 = st.columns([3,5,3])
 
-# Left column: Data input
 
 with col1:
     st.header("Data Input")
@@ -30,7 +27,7 @@ with col1:
     with btn_col2: 
         resetButton = st.button("Reset data")
 
-# Right column: Distribution settings
+
 with col3:
     st.header("Distribution Settings")
     scipyChoice = st.selectbox("Select distribution",
@@ -39,10 +36,7 @@ with col3:
                                 "Lognormal","Uniform","Pareto"))
     locSlider = st.slider("Shift (loc)", -10, 10, 0)
     scaleSlider = st.slider("Scale", 0.1, 10.0, 1.0)
-    
-# -------------------
-# Display current data
-# -------------------
+
 
 if "dataList" not in st.session_state:
     st.session_state.dataList = []
@@ -111,7 +105,7 @@ if dist_manual is not None and len(data) != 0:
             x = np.linspace(min(data)-1, max(data)+1, 300)
             pdf = dist_manual.pdf(x)
             fig, ax = plt.subplots()
-            ax.hist(data, bins=1, density=False, alpha=0.5)
+            ax.hist(data, bins=max(1, len(data)//2), density=False, alpha=0.5)
             ax.plot(x, pdf, 'r-', linewidth=2)
             ax.set_xlabel("Value")
             ax.set_ylabel("Frequency")
