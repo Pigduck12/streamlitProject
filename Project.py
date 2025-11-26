@@ -109,17 +109,16 @@ if len(data) != 0:
 
     if dist_manual is not None and len(data) != 0:
         with col3:
-            with st.expander("Histogram and Fitted Distribution", expanded=True):
-                x = np.linspace(min(data)-1, max(data)+1, 300)
-                pdf = dist_manual.pdf(x)
-                fig, ax = plt.subplots()
-                ax.hist(data, bins=max(1, len(data)//2), density=False, alpha=0.5)
-                ax.plot(x, pdf, 'r-', linewidth=2)
-                ax.set_xlabel("Value")
-                ax.set_ylabel("Frequency")
-                ax.set_title(f"{scipyChoice} Fit")
-                with col2:
-                    st.pyplot(fig)
+            x = np.linspace(min(data)-1, max(data)+1, 300)
+            pdf = dist_manual.pdf(x)
+            fig, ax = plt.subplots()
+            ax.hist(data, bins=max(1, len(data)//2), density=False, alpha=0.5)
+            ax.plot(x, pdf, 'r-', linewidth=2)
+            ax.set_xlabel("Value")
+            ax.set_ylabel("Frequency")
+            ax.set_title(f"{scipyChoice} Fit")
+            with col2:
+                st.pyplot(fig)
         
     if dist_manual is not None:
         with col3:
