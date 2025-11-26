@@ -82,16 +82,27 @@ dist_manual = None
 if len(data) != 0:
     try:
         params = dist_object.fit(data)
-        shape_params = params[:-2] if len(params) > 2 else ()
-        if shape_params:
+        shape_params = params[:-2]
+        loc_fitted = params[-2]
+        scale_fitted = params[-1]
+        if scipyChoice == "Beta":
+            a, b = shape_params
+            # No shape slider for Beta, just use fitted shapes
+            dist_manual = dist_object(a, b, loc=locSlider, scale=scaleSlider)
+
+        elif len(shape_params) == 0:
+            dist_manual = dist_object(loc=locSlider, scale=scaleSlider)
+
+        elif len(shape_params) == 1:
             with col3:
-                shapeSlider = st.slider("Shape", 0.1, 10.0, float(shape_params[0]))
+                shapeSlider = st.slider("Shape", 0.01, 10.0, float(shape_params[0]))
             dist_manual = dist_object(shapeSlider, loc=locSlider, scale=scaleSlider)
         else:
             dist_manual = dist_object(loc=locSlider, scale=scaleSlider)
-    except Exception:
+
+    except Exception as e:
         with col2:
-            st.warning("distribution cannot take negatives")
+            st.warning(f"Fit failed: {e}")
         params = None
 
 if dist_manual is not None and len(data) != 0:
