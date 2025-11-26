@@ -66,13 +66,21 @@ if resetButton:
     st.session_state.dataList = []
 if fileUploader is not None:
     df = pd.read_csv(fileUploader)
-    st.session_state.dataList = df.values.flatten().tolist()
+    try:
+        st.session_state.dataList = df.values.flatten().tolist()
+    except:
+        with col2:
+            st.write("Invalid File")
 dist_object = DISTRIBUTIONS[scipyChoice]
 data = np.array(st.session_state.dataList)
 
 
 
 dist_manual = None
+shapeSlider = None
+if len(data) == 0:
+    with col2:
+        st.write("input data!")
 if len(data) != 0:
     try:
         params = dist_object.fit(data)
@@ -99,26 +107,30 @@ if len(data) != 0:
             st.warning("not enough data for this distribution")
         params = None
 
-if dist_manual is not None and len(data) != 0:
-    with col3:
-        with st.expander("Histogram and Fitted Distribution", expanded=True):
-            x = np.linspace(min(data)-1, max(data)+1, 300)
-            pdf = dist_manual.pdf(x)
-            fig, ax = plt.subplots()
-            ax.hist(data, bins=max(1, len(data)//2), density=False, alpha=0.5)
-            ax.plot(x, pdf, 'r-', linewidth=2)
-            ax.set_xlabel("Value")
-            ax.set_ylabel("Frequency")
-            ax.set_title(f"{scipyChoice} Fit")
-            with col2:
-                st.pyplot(fig)
-    
-if dist_manual is not None:
-    with col3:
-        st.subheader("Current Data")
-        st.write(f"Shape: {shape_params if shape_params else 'N/A'}")
-        st.write(f"Loc: {locSlider}")
-        st.write(f"Scale: {scaleSlider}")
+    if dist_manual is not None and len(data) != 0:
+        with col3:
+            with st.expander("Histogram and Fitted Distribution", expanded=True):
+                x = np.linspace(min(data)-1, max(data)+1, 300)
+                pdf = dist_manual.pdf(x)
+                fig, ax = plt.subplots()
+                ax.hist(data, bins=max(1, len(data)//2), density=False, alpha=0.5)
+                ax.plot(x, pdf, 'r-', linewidth=2)
+                ax.set_xlabel("Value")
+                ax.set_ylabel("Frequency")
+                ax.set_title(f"{scipyChoice} Fit")
+                with col2:
+                    st.pyplot(fig)
+        
+    if dist_manual is not None:
+        with col3:
+            st.subheader("Current Data")
+            if shapeSlider:
+                with col3:
+                    st.write(f"Shape: {shapeSlider if shape_params else 'N/A'}")
+            else:
+                st.write(f"Shape: {shape_params if shape_params else 'N/A'}")
+            st.write(f"Loc: {locSlider}")
+            st.write(f"Scale: {scaleSlider}")
 
 
 
