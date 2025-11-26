@@ -111,7 +111,7 @@ if dist_manual is not None and len(data) != 0:
             x = np.linspace(min(data)-1, max(data)+1, 300)
             pdf = dist_manual.pdf(x)
             fig, ax = plt.subplots()
-            ax.hist(data, bins=max(1, len(data)//2), density=False, alpha=0.5)
+            ax.hist(data, bins=1, density=False, alpha=0.5)
             ax.plot(x, pdf, 'r-', linewidth=2)
             ax.set_xlabel("Value")
             ax.set_ylabel("Frequency")
