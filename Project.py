@@ -102,7 +102,7 @@ if len(data) != 0:
 
     except Exception as e:
         with col2:
-            st.warning(f"Fit failed: {e}")
+            st.warning("not enough data for this distribution")
         params = None
 
 if dist_manual is not None and len(data) != 0:
